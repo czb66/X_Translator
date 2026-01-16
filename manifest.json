@@ -3,8 +3,8 @@
   "name": "X Translator",
   "version": "1.0.0",
   "description": "智能翻译扩展：自动识别输入场景，智能选择目标语言，支持一键替换",
-  "homepage_url": "https://github.com/your-username/X_Translator",
-  "privacy_policy": "https://your-username.github.io/X_Translator/privacy-policy.html",
+  "homepage_url": "https://github.com/czb66/X_Translator",
+  "privacy_policy": "https://czb66.github.io/X_Translator/privacy-policy.html",
   "permissions": [
     "activeTab",
     "storage",
