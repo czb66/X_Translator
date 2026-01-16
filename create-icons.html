@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生成扩展图标</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    canvas {
+      border: 1px solid #ddd;
+      margin: 10px;
+      display: block;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      background: #1da1f2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1a91da;
+    }
+    .preview {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>X Translator 图标生成器</h1>
+  <p>点击按钮生成图标，然后右键保存图片</p>
+  
+  <button onclick="generateIcons()">生成所有图标</button>
+  
+  <div class="preview">
+    <div>
+      <h3>16x16</h3>
+      <canvas id="icon16" width="16" height="16"></canvas>
+      <a id="download16" download="icon16.png" style="display:none;">下载</a>
+    </div>
+    <div>
+      <h3>48x48</h3>
+      <canvas id="icon48" width="48" height="48"></canvas>
+      <a id="download48" download="icon48.png" style="display:none;">下载</a>
+    </div>
+    <div>
+      <h3>128x128</h3>
+      <canvas id="icon128" width="128" height="128"></canvas>
+      <a id="download128" download="icon128.png" style="display:none;">下载</a>
+    </div>
+  </div>
+
+  <script>
+    function drawIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      
+      // 背景 - 蓝色渐变
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#1da1f2');
+      gradient.addColorStop(1, '#0d8bd9');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+      
+      // 绘制地球图标（简化版）
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = size / 16;
+      
+      // 绘制圆形（地球）
+      const centerX = size / 2;
+      const centerY = size / 2;
+      const radius = size * 0.35;
+      
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // 绘制经线
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, -Math.PI / 4, Math.PI / 4);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, Math.PI * 3 / 4, Math.PI * 5 / 4);
+      ctx.stroke();
+      
+      // 绘制纬线
+      ctx.beginPath();
+      ctx.ellipse(centerX, centerY - radius * 0.3, radius * 0.8, radius * 0.3, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(centerX, centerY + radius * 0.3, radius * 0.8, radius * 0.3, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // 绘制箭头（表示翻译）
+      const arrowSize = size * 0.15;
+      const arrowX = centerX + radius * 0.8;
+      const arrowY = centerY;
+      
+      ctx.beginPath();
+      ctx.moveTo(arrowX, arrowY);
+      ctx.lineTo(arrowX + arrowSize, arrowY - arrowSize / 2);
+      ctx.lineTo(arrowX + arrowSize, arrowY + arrowSize / 2);
+      ctx.closePath();
+      ctx.fill();
+    }
+    
+    function generateIcons() {
+      const sizes = [16, 48, 128];
+      
+      sizes.forEach(size => {
+        const canvas = document.getElementById(`icon${size}`);
+        drawIcon(canvas, size);
+        
+        // 创建下载链接
+        canvas.toBlob(blob => {
+          const url = URL.createObjectURL(blob);
+          const link = document.getElementById(`download${size}`);
+          link.href = url;
+          link.style.display = 'inline-block';
+          link.textContent = '下载';
+        });
+      });
+    }
+    
+    // 页面加载时自动生成
+    window.onload = generateIcons;
+  </script>
+</body>
+</html>
